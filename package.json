@@ -1,7 +1,7 @@
 {
-  "name": "placeholder",
+  "name": "nested-builder",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tersely construct complex test fixture objects with the builder pattern.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -13,15 +13,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/owner/repo.git"
+    "url": "git+ssh://git@github.com/smashwilson/nested-builder.git"
   },
-  "keywords": [],
+  "keywords": [
+    "fixture",
+    "builder-pattern"
+  ],
   "author": "Ash Wilson <smashwilson@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/owner/repo/issues"
+    "url": "https://github.com/smashwilson/nested-builder/issues"
   },
-  "homepage": "https://github.com/owner/repo#readme",
+  "homepage": "https://github.com/smashwilson/nested-builder#readme",
   "devDependencies": {
     "@types/chai": "^4.2.1",
     "@types/mocha": "^5.2.7",
