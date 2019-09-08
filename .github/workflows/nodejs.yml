@@ -1,0 +1,16 @@
+name: ci
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: install dependencies
+      run: npm ci
+    - name: lint
+      run: npm run lint
+    - name: tests
+      run: npm test

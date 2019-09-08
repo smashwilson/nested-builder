@@ -1,0 +1,7 @@
+lib/
+test/
+.mocharc.json
+.prettierrc.json
+tsconfig.json
+tsconfig.build.json
+*.tgz

@@ -1,0 +1,34 @@
+{
+  "name": "placeholder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "prettier --check {lib,test}/**/*.{ts,js}",
+    "format": "prettier --write {lib,test}/**/*.{ts,js}",
+    "test": "mocha",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/owner/repo.git"
+  },
+  "keywords": [],
+  "author": "Ash Wilson <smashwilson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/owner/repo/issues"
+  },
+  "homepage": "https://github.com/owner/repo#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.1",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "prettier": "^1.18.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
+  }
+}
