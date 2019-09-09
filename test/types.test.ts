@@ -34,7 +34,7 @@ describe("simple types", function() {
         aNumber: 456,
         aBoolean: false,
         anArray: ["zz", "yy", "xx"],
-        aTuple: [2, "b", false],
+        aTuple: [2, "a", true],
       });
     });
 

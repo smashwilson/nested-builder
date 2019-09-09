@@ -4,7 +4,7 @@ const {createBuilderClass} = require("../lib/index");
 
 describe("JavaScript clients", function() {
   describe("with a simple type", function() {
-    const SimpleBuilder = createBuilderClass({
+    const SimpleBuilder = createBuilderClass()({
       aString: {default: "abc"},
       aNumber: {default: 123},
       aBoolean: {default: true},
@@ -26,7 +26,7 @@ describe("JavaScript clients", function() {
         aNumber: 456,
         aBoolean: false,
         anArray: ["zz", "yy", "xx"],
-        aTuple: [2, "b", false],
+        aTuple: [2, "a", true],
       });
     });
 
