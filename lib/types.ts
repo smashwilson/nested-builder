@@ -48,7 +48,7 @@ type SetterFn<F, T, Self> = T extends NestedFieldTemplate<infer SF, infer ST>
   : ScalarSetterFn<F, Self>;
 
 export type Builder<R, T extends Template<R>> = {
-  [P in keyof R]-?: SetterFn<R[P], T[P], Builder<R, T>>;
+  readonly [P in keyof R]-?: SetterFn<R[P], T[P], Builder<R, T>>;
 } & {
   build(): R;
 };
