@@ -8,7 +8,7 @@ describe("JavaScript clients", function() {
       aString: {default: "abc"},
       aNumber: {default: 123},
       aBoolean: {default: true},
-      anArray: {default: ["aa", "bb", "cc"]},
+      anArray: {generator: () => ["aa", "bb", "cc"]},
       aTuple: {default: [1, "b", false]},
     });
 

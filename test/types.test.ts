@@ -11,7 +11,7 @@ interface ISimple {
 }
 
 describe("simple types", function() {
-  describe("with a fully specified builder", function() {
+  describe("with static default values", function() {
     const SimpleBuilder = createBuilderClass<ISimple>()({
       aString: {default: "abc"},
       aNumber: {default: 123},
@@ -51,17 +51,43 @@ describe("simple types", function() {
     });
   });
 
-  describe("with an automatic builder", function() {
-    it("defaults optional fields to undefined or null");
+  describe("with generated default values", function() {
+    const SimpleBuilder = createBuilderClass<ISimple>()({
+      aString: {generator: () => "dynamic string"},
+      aNumber: {generator: () => 456},
+      aBoolean: {generator: () => true},
+      anArray: {generator: () => []},
+      aTuple: {generator: () => [10, "zz", false]},
+    });
 
-    it("defaults optional arrays to the empty array");
+    it("builds an instance with provided fields", function() {
+      const instance = new SimpleBuilder()
+        .aString("def")
+        .aNumber(456)
+        .aBoolean(false)
+        .anArray(["zz", "yy", "xx"])
+        .aTuple([2, "a", true])
+        .build();
 
-    it("defaults to generating random values for unspecified fields");
-  });
+      assert.deepEqual(instance, {
+        aString: "def",
+        aNumber: 456,
+        aBoolean: false,
+        anArray: ["zz", "yy", "xx"],
+        aTuple: [2, "a", true],
+      });
+    });
 
-  describe("with a partially specified builder", function() {
-    it("respects specified field defaults");
+    it("uses the generator for unprovided fields", function() {
+      const instance = new SimpleBuilder().build();
 
-    it("uses random values for unspecified fields");
+      assert.deepEqual(instance, {
+        aString: "dynamic string",
+        aNumber: 456,
+        aBoolean: true,
+        anArray: [],
+        aTuple: [10, "zz", false],
+      });
+    });
   });
 });
