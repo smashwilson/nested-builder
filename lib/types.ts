@@ -34,7 +34,7 @@ export type FieldTemplate<F, T extends Template<F>> =
   | NestedFieldTemplate<F, T>;
 
 export type Template<R> = {
-  [P in keyof R]: FieldTemplate<R[P], Template<R[P]>>;
+  [P in keyof R]-?: FieldTemplate<R[P], Template<R[P]>>;
 };
 
 type ScalarSetterFn<F, Self> = (value: F) => Self;
@@ -43,12 +43,12 @@ type NestedSetterFn<F, T extends Template<F>, Self> = (
   block: (builder: Builder<F, T>) => any
 ) => Self;
 
-type SetterFn<F, FT, Self> = FT extends NestedFieldTemplate<any, infer T>
-  ? NestedSetterFn<F, T, Self>
+type SetterFn<F, T, Self> = T extends NestedFieldTemplate<infer SF, infer ST>
+  ? NestedSetterFn<SF, ST, Self>
   : ScalarSetterFn<F, Self>;
 
 export type Builder<R, T extends Template<R>> = {
-  [P in keyof R]: SetterFn<R[P], T[P], Builder<R, T>>;
+  [P in keyof R]-?: SetterFn<R[P], T[P], Builder<R, T>>;
 } & {
   build(): R;
 };
