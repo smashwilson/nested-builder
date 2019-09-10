@@ -42,4 +42,58 @@ describe("JavaScript clients", function() {
       });
     });
   });
+
+  describe("plural fields", function() {
+    const PluralBuilder = createBuilderClass()({
+      pluralScalar: {plural: true},
+      pluralNested: {plural: true, nested: SimpleBuilder},
+    });
+
+    it("implicitly defaults to []", function() {
+      const instance = new PluralBuilder().build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [],
+        pluralNested: [],
+      });
+    });
+
+    it("may be set all at once with a bulk setter", function() {
+      const instance = new PluralBuilder().pluralScalar([1, 2, 3]).build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [1, 2, 3],
+        pluralNested: [],
+      });
+    });
+
+    it("may be constructed iteratively with .add", function() {
+      const instance = new PluralBuilder().pluralScalar
+        .add(10)
+        .pluralScalar.add(20)
+        .pluralNested.add(sb => sb.aString("zero"))
+        .pluralNested.add(sb => sb.aString("one"))
+        .build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [10, 20],
+        pluralNested: [
+          {
+            aString: "zero",
+            aNumber: 123,
+            aBoolean: true,
+            anArray: ["aa", "bb", "cc"],
+            aTuple: [1, "b", false],
+          },
+          {
+            aString: "one",
+            aNumber: 123,
+            aBoolean: true,
+            anArray: ["aa", "bb", "cc"],
+            aTuple: [1, "b", false],
+          },
+        ],
+      });
+    });
+  });
 });
