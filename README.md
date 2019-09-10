@@ -99,6 +99,7 @@ const ResponseBuilder = createBuilderClass<Response>()({
   fieldZero: {default: 123},
   fieldOne: {generator: generateRandomString},
   fieldTwo: {nested: OtherBuilderClass},
+  fieldThree: {plural: true, default: []},
 });
 ```
 
@@ -122,4 +123,25 @@ const instance = new ResponseBuilder()
 
 assert.strictEqual(instance.fieldTwo.otherFieldZero, 0);
 assert.isTrue(instance.fieldTwo.otherFieldOne);
+```
+
+Setters that are _plural_ may be either set as complete Arrays, or constructed piece by piece with a `.fieldName.add` method:
+
+```ts
+const ResponseBuilder = createBuilderClass<Response>()({
+  fieldZero: {plural: true, default: []},
+  fieldOne: {plural: true, nested: OtherBuilder},
+});
+
+const instance = new ResponseBuilder()
+  .fieldZero([1, 2, 3])
+  .fieldOne.add(b => b.otherFieldOne("aaa"))
+  .fieldOne.add(b => b.otherFieldOne("bbb"))
+  .build();
+
+assert.deepEqual(instance.fieldZero, [1, 2, 3]);
+assert.deepEqual(instance.fieldOne, [
+  {otherFieldOne: "aaa"},
+  {otherFieldOne: "bbb"},
+]);
 ```
