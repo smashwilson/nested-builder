@@ -44,9 +44,14 @@ describe("JavaScript clients", function() {
   });
 
   describe("plural fields", function() {
+    const ElementBuilder = createBuilderClass()({
+      innerString: {default: "abc"},
+      innerNumber: {default: 10},
+    });
+
     const PluralBuilder = createBuilderClass()({
       pluralScalar: {plural: true},
-      pluralNested: {plural: true, nested: SimpleBuilder},
+      pluralNested: {plural: true, nested: ElementBuilder},
     });
 
     it("implicitly defaults to []", function() {
@@ -59,11 +64,14 @@ describe("JavaScript clients", function() {
     });
 
     it("may be set all at once with a bulk setter", function() {
-      const instance = new PluralBuilder().pluralScalar([1, 2, 3]).build();
+      const instance = new PluralBuilder()
+        .pluralScalar([1, 2, 3])
+        .pluralNested([{innerString: "zzz", innerNumber: 5}])
+        .build();
 
       assert.deepEqual(instance, {
         pluralScalar: [1, 2, 3],
-        pluralNested: [],
+        pluralNested: [{innerString: "zzz", innerNumber: 5}],
       });
     });
 
@@ -71,26 +79,20 @@ describe("JavaScript clients", function() {
       const instance = new PluralBuilder().pluralScalar
         .add(10)
         .pluralScalar.add(20)
-        .pluralNested.add(sb => sb.aString("zero"))
-        .pluralNested.add(sb => sb.aString("one"))
+        .pluralNested.add(sb => sb.innerString("zero"))
+        .pluralNested.add(sb => sb.innerNumber(6))
         .build();
 
       assert.deepEqual(instance, {
         pluralScalar: [10, 20],
         pluralNested: [
           {
-            aString: "zero",
-            aNumber: 123,
-            aBoolean: true,
-            anArray: ["aa", "bb", "cc"],
-            aTuple: [1, "b", false],
+            innerString: "zero",
+            innerNumber: 10,
           },
           {
-            aString: "one",
-            aNumber: 123,
-            aBoolean: true,
-            anArray: ["aa", "bb", "cc"],
-            aTuple: [1, "b", false],
+            innerString: "abc",
+            innerNumber: 6,
           },
         ],
       });
