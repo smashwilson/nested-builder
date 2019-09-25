@@ -90,4 +90,44 @@ describe("simple types", function() {
       });
     });
   });
+
+  describe("plural fields", function() {
+    interface IPlural {
+      arrayField: string[];
+    }
+
+    const PluralBuilder = createBuilderClass<IPlural>()({
+      arrayField: {plural: true},
+    });
+
+    it("implicitly has a default of []", function() {
+      const instance = new PluralBuilder().build();
+
+      assert.deepEqual(instance, {
+        arrayField: [],
+      });
+    });
+
+    it("may be set directly with a complete array", function() {
+      const instance = new PluralBuilder()
+        .arrayField(["one", "two", "three"])
+        .build();
+
+      assert.deepEqual(instance, {
+        arrayField: ["one", "two", "three"],
+      });
+    });
+
+    it("may be set iteratively with .add methods", function() {
+      const instance = new PluralBuilder().arrayField
+        .add("xxx")
+        .arrayField.add("yyy")
+        .arrayField.add("zzz")
+        .build();
+
+      assert.deepEqual(instance, {
+        arrayField: ["xxx", "yyy", "zzz"],
+      });
+    });
+  });
 });

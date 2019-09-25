@@ -42,4 +42,60 @@ describe("JavaScript clients", function() {
       });
     });
   });
+
+  describe("plural fields", function() {
+    const ElementBuilder = createBuilderClass()({
+      innerString: {default: "abc"},
+      innerNumber: {default: 10},
+    });
+
+    const PluralBuilder = createBuilderClass()({
+      pluralScalar: {plural: true},
+      pluralNested: {plural: true, nested: ElementBuilder},
+    });
+
+    it("implicitly defaults to []", function() {
+      const instance = new PluralBuilder().build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [],
+        pluralNested: [],
+      });
+    });
+
+    it("may be set all at once with a bulk setter", function() {
+      const instance = new PluralBuilder()
+        .pluralScalar([1, 2, 3])
+        .pluralNested([{innerString: "zzz", innerNumber: 5}])
+        .build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [1, 2, 3],
+        pluralNested: [{innerString: "zzz", innerNumber: 5}],
+      });
+    });
+
+    it("may be constructed iteratively with .add", function() {
+      const instance = new PluralBuilder().pluralScalar
+        .add(10)
+        .pluralScalar.add(20)
+        .pluralNested.add(sb => sb.innerString("zero"))
+        .pluralNested.add(sb => sb.innerNumber(6))
+        .build();
+
+      assert.deepEqual(instance, {
+        pluralScalar: [10, 20],
+        pluralNested: [
+          {
+            innerString: "zero",
+            innerNumber: 10,
+          },
+          {
+            innerString: "abc",
+            innerNumber: 6,
+          },
+        ],
+      });
+    });
+  });
 });

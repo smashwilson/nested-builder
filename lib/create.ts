@@ -1,4 +1,4 @@
-import {Template, Builder, BuilderClass, isNested} from "./types";
+import {Template, Builder, BuilderClass, isNested, isPlural} from "./types";
 import {BuilderBase} from "./builder";
 
 export function createBuilderClass<R>() {
@@ -15,6 +15,16 @@ export function createBuilderClass<R>() {
       };
     }
 
+    function defineScalarAdder<E, N extends keyof T>(fieldName: N) {
+      Object.defineProperty(DynamicBuilder.prototype, fieldName, {
+        get() {
+          const fn = (elements: E[]) => this.setScalar(fieldName, elements);
+          fn.add = (element: E) => this.addScalar(fieldName, element);
+          return fn;
+        },
+      });
+    }
+
     function defineNestedSetter<F, N extends keyof T>(
       fieldName: N,
       builderClass: BuilderClass<F, Template<F>>
@@ -27,9 +37,33 @@ export function createBuilderClass<R>() {
       };
     }
 
+    function defineNestedAdder<E, N extends keyof T>(
+      fieldName: N,
+      builderClass: BuilderClass<E, Template<E>>
+    ) {
+      Object.defineProperty(DynamicBuilder.prototype, fieldName, {
+        get() {
+          const fn = (elements: E[]) => this.setScalar(fieldName, elements);
+          fn.add = (
+            block: (builder: InstanceType<BuilderClass<E, Template<E>>>) => any
+          ) => {
+            const builder = new builderClass();
+            return this.addNested(fieldName, builder, block);
+          };
+          return fn;
+        },
+      });
+    }
+
     for (const fieldName in template) {
       const fieldTemplate = template[fieldName];
-      if (isNested(fieldTemplate)) {
+      if (isPlural(fieldTemplate)) {
+        if (isNested(fieldTemplate)) {
+          defineNestedAdder(fieldName, fieldTemplate.nested);
+        } else {
+          defineScalarAdder(fieldName);
+        }
+      } else if (isNested(fieldTemplate)) {
         defineNestedSetter(fieldName, fieldTemplate.nested);
       } else {
         defineScalarSetter(fieldName);

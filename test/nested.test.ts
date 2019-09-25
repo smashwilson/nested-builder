@@ -96,4 +96,31 @@ describe("nested types", function() {
       c2: false,
     });
   });
+
+  describe("plural fields", function() {
+    interface IPlural {
+      children: IGrandChild[];
+    }
+
+    const PluralBuilder = createBuilderClass<IPlural>()({
+      children: {plural: true, nested: GrandChildBuilder},
+    });
+
+    it("implicitly defaults to []", function() {
+      const instance = new PluralBuilder().build();
+
+      assert.deepEqual(instance, {children: []});
+    });
+
+    it("may be constructed iteratively with .add", function() {
+      const instance = new PluralBuilder().children
+        .add(gcb => gcb.gc0("zero").gc1(0))
+        .children.add(gcb => gcb.gc0("one").gc1(1))
+        .build();
+
+      assert.deepEqual(instance, {
+        children: [{gc0: "zero", gc1: 0}, {gc0: "one", gc1: 1}],
+      });
+    });
+  });
 });
