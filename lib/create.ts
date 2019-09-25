@@ -44,12 +44,14 @@ export function createBuilderClass<R>() {
       Object.defineProperty(DynamicBuilder.prototype, fieldName, {
         get() {
           const fn = (elements: E[]) => this.setScalar(fieldName, elements);
-          fn.add = (block: (builder: InstanceType<BuilderClass<E, Template<E>>>) => any) => {
+          fn.add = (
+            block: (builder: InstanceType<BuilderClass<E, Template<E>>>) => any
+          ) => {
             const builder = new builderClass();
             return this.addNested(fieldName, builder, block);
-          }
+          };
           return fn;
-        }
+        },
       });
     }
 
