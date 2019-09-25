@@ -45,6 +45,7 @@ export abstract class BuilderBase<R> {
     fieldName: F,
     value: E
   ): this {
+    this.ensureArray(fieldName);
     (this.underConstruction[fieldName] as any).push(value);
     return this;
   }
@@ -63,8 +64,15 @@ export abstract class BuilderBase<R> {
     E extends Element<R[F]>,
     B extends Builder<E, Template<E>>
   >(fieldName: F, builder: B, block: (builder: B) => any) {
+    this.ensureArray(fieldName);
     block(builder);
     (this.underConstruction[fieldName] as any).push(builder.build());
     return this;
+  }
+
+  private ensureArray<F extends keyof R>(fieldName: F) {
+    if (!(fieldName in this.underConstruction)) {
+      (this.underConstruction[fieldName] as any) = [];
+    }
   }
 }
