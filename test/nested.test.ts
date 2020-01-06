@@ -119,7 +119,10 @@ describe("nested types", function() {
         .build();
 
       assert.deepEqual(instance, {
-        children: [{gc0: "zero", gc1: 0}, {gc0: "one", gc1: 1}],
+        children: [
+          {gc0: "zero", gc1: 0},
+          {gc0: "one", gc1: 1},
+        ],
       });
     });
   });
