@@ -2,8 +2,8 @@ const {assert} = require("chai");
 
 const {createBuilderClass} = require("../lib/index");
 
-describe("JavaScript clients", function() {
-  describe("with a simple type", function() {
+describe("JavaScript clients", function () {
+  describe("with a simple type", function () {
     const SimpleBuilder = createBuilderClass()({
       aString: {default: "abc"},
       aNumber: {default: 123},
@@ -12,7 +12,7 @@ describe("JavaScript clients", function() {
       aTuple: {default: [1, "b", false]},
     });
 
-    it("builds an instance with provided values", function() {
+    it("builds an instance with provided values", function () {
       const instance = new SimpleBuilder()
         .aString("def")
         .aNumber(456)
@@ -30,7 +30,7 @@ describe("JavaScript clients", function() {
       });
     });
 
-    it("builds an instance with default values", function() {
+    it("builds an instance with default values", function () {
       const instance = new SimpleBuilder().build();
 
       assert.deepEqual(instance, {
@@ -43,7 +43,7 @@ describe("JavaScript clients", function() {
     });
   });
 
-  describe("plural fields", function() {
+  describe("plural fields", function () {
     const ElementBuilder = createBuilderClass()({
       innerString: {default: "abc"},
       innerNumber: {default: 10},
@@ -54,7 +54,7 @@ describe("JavaScript clients", function() {
       pluralNested: {plural: true, nested: ElementBuilder},
     });
 
-    it("implicitly defaults to []", function() {
+    it("implicitly defaults to []", function () {
       const instance = new PluralBuilder().build();
 
       assert.deepEqual(instance, {
@@ -63,7 +63,7 @@ describe("JavaScript clients", function() {
       });
     });
 
-    it("may be set all at once with a bulk setter", function() {
+    it("may be set all at once with a bulk setter", function () {
       const instance = new PluralBuilder()
         .pluralScalar([1, 2, 3])
         .pluralNested([{innerString: "zzz", innerNumber: 5}])
@@ -75,12 +75,12 @@ describe("JavaScript clients", function() {
       });
     });
 
-    it("may be constructed iteratively with .add", function() {
+    it("may be constructed iteratively with .add", function () {
       const instance = new PluralBuilder().pluralScalar
         .add(10)
         .pluralScalar.add(20)
-        .pluralNested.add(sb => sb.innerString("zero"))
-        .pluralNested.add(sb => sb.innerNumber(6))
+        .pluralNested.add((sb) => sb.innerString("zero"))
+        .pluralNested.add((sb) => sb.innerNumber(6))
         .build();
 
       assert.deepEqual(instance, {
