@@ -10,7 +10,7 @@ export function createBuilderClass<R>() {
     } as any;
 
     function defineScalarSetter<F, N extends keyof T>(fieldName: N) {
-      DynamicBuilder.prototype[fieldName] = function(value: F) {
+      DynamicBuilder.prototype[fieldName] = function (value: F) {
         return this.setScalar(fieldName, value);
       };
     }
@@ -29,7 +29,7 @@ export function createBuilderClass<R>() {
       fieldName: N,
       builderClass: BuilderClass<F, Template<F>>
     ) {
-      DynamicBuilder.prototype[fieldName] = function(
+      DynamicBuilder.prototype[fieldName] = function (
         block: (builder: Builder<F, Template<F>>) => any
       ) {
         const builder = new builderClass();

@@ -10,8 +10,8 @@ interface ISimple {
   aTuple: [number, string, boolean];
 }
 
-describe("simple types", function() {
-  describe("with static default values", function() {
+describe("simple types", function () {
+  describe("with static default values", function () {
     const SimpleBuilder = createBuilderClass<ISimple>()({
       aString: {default: "abc"},
       aNumber: {default: 123},
@@ -20,7 +20,7 @@ describe("simple types", function() {
       aTuple: {default: [1, "b", false]},
     });
 
-    it("builds an instance with provided values", function() {
+    it("builds an instance with provided values", function () {
       const instance = new SimpleBuilder()
         .aString("def")
         .aNumber(456)
@@ -38,7 +38,7 @@ describe("simple types", function() {
       });
     });
 
-    it("uses specified default values for unprovided values", function() {
+    it("uses specified default values for unprovided values", function () {
       const instance = new SimpleBuilder().build();
 
       assert.deepEqual(instance, {
@@ -51,7 +51,7 @@ describe("simple types", function() {
     });
   });
 
-  describe("with generated default values", function() {
+  describe("with generated default values", function () {
     const SimpleBuilder = createBuilderClass<ISimple>()({
       aString: {generator: () => "dynamic string"},
       aNumber: {generator: () => 456},
@@ -60,7 +60,7 @@ describe("simple types", function() {
       aTuple: {generator: () => [10, "zz", false]},
     });
 
-    it("builds an instance with provided fields", function() {
+    it("builds an instance with provided fields", function () {
       const instance = new SimpleBuilder()
         .aString("def")
         .aNumber(456)
@@ -78,7 +78,7 @@ describe("simple types", function() {
       });
     });
 
-    it("uses the generator for unprovided fields", function() {
+    it("uses the generator for unprovided fields", function () {
       const instance = new SimpleBuilder().build();
 
       assert.deepEqual(instance, {
@@ -91,7 +91,7 @@ describe("simple types", function() {
     });
   });
 
-  describe("plural fields", function() {
+  describe("plural fields", function () {
     interface IPlural {
       arrayField: string[];
     }
@@ -100,7 +100,7 @@ describe("simple types", function() {
       arrayField: {plural: true},
     });
 
-    it("implicitly has a default of []", function() {
+    it("implicitly has a default of []", function () {
       const instance = new PluralBuilder().build();
 
       assert.deepEqual(instance, {
@@ -108,7 +108,7 @@ describe("simple types", function() {
       });
     });
 
-    it("may be set directly with a complete array", function() {
+    it("may be set directly with a complete array", function () {
       const instance = new PluralBuilder()
         .arrayField(["one", "two", "three"])
         .build();
@@ -118,7 +118,7 @@ describe("simple types", function() {
       });
     });
 
-    it("may be set iteratively with .add methods", function() {
+    it("may be set iteratively with .add methods", function () {
       const instance = new PluralBuilder().arrayField
         .add("xxx")
         .arrayField.add("yyy")
