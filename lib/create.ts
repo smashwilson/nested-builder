@@ -3,11 +3,12 @@ import {BuilderBase} from "./builder";
 
 export function createBuilderClass<R>() {
   return <T extends Template<R>>(template: T): BuilderClass<R, T> => {
-    const DynamicBuilder: BuilderClass<R, T> = class extends BuilderBase<R> {
-      constructor() {
-        super(template);
-      }
-    } as any;
+    const DynamicBuilder: BuilderClass<R, T> =
+      class extends BuilderBase<R> {
+        constructor() {
+          super(template);
+        }
+      } as any;
 
     function defineScalarSetter<F, N extends keyof T>(fieldName: N) {
       DynamicBuilder.prototype[fieldName] = function (value: F) {
