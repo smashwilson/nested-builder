@@ -27,7 +27,7 @@
   "homepage": "https://github.com/smashwilson/nested-builder#readme",
   "devDependencies": {
     "@types/chai": "^4.2.1",
-    "@types/mocha": "^8.0.0",
+    "@types/mocha": "^9.0.0",
     "chai": "^4.2.0",
     "mocha": "^8.0.1",
     "prettier": "^2.0.2",
